@@ -1,2 +1,2 @@
 # geekbrains_python
-Home works
+Выполнение домашних заданий по курсу Python от geekbrains
