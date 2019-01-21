@@ -21,21 +21,26 @@ line = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysmNO'\
        'qHFjvihuNGEEFsfnMXTfptvIOlhKhyYwxLnqOsBdGvnuyEZIheApQGOXWeXoLWiDQNJFa'\
        'XiUWgsKQrDOeZoNlZNRvHnLgCmysUeKnVJXPFIzvdDyleXylnKBfLCjLHntltignbQoiQ'\
        'zTYwZAiRwycdlHfyHNGmkNqSwXUrxGc'
-# result = re.split('[A-Z]+', line)
-result = []
+
+# способ 1
+result = re.split('[A-Z]+', line)
+print(result)
+
+# способ 2
+result_1 = []
 str = ""
 for el in line:
     if not el.isupper():
        str += el
     else:
         if len(str) > 0:
-            result.append(str)
+            result_1.append(str)
             str = ""
         else:
             continue
-
-
-# print(result)
+if len(str) > 0:
+  result_1.append(str)
+print(result_1)
 
 # Задание-2:
 # Вывести символы в верхнем регистре, слева от которых находятся
@@ -62,11 +67,30 @@ line_2 = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysm'\
        'JFaXiUWgsKQrDOeZoNlZNRvHnLgCmysUeKnVJXPFIzvdDyleXylnKBfLCjLHntltignbQ'\
        'oiQzTYwZAiRwycdlHfyHNGmkNqSwXUrxGC'
 
+# способ 1
 result = []
-for m in re.finditer(r'([a-z]{2}([A-Z]+)[A-Z]{2}[a-z]+)+?', line):
+for m in re.finditer(r'([a-z]{2}([A-Z]+)[A-Z]{2})+?', line_2):
     result.append(m.groups()[1])
 print(result)
 
+# способ 2
+result_2 = []
+i = 0;
+while i < len(line_2):
+  str = ""
+  if not line_2[i].isupper():
+      i += 1
+      continue
+  if not line_2[i-2 : i-1].isupper() and not line_2[i-1 : i].isupper():
+      str = line_2[i-2 : i]
+      while i < len(line_2) and line_2[i].isupper():
+          str += line_2[i]
+          i += 1
+  if len(str) >= 5:
+    result_2.append(str[2 : -2])
+  i += 1
+
+print(result_2)
 
 # Задание-3:
 # Напишите скрипт, заполняющий указанный файл (самостоятельно задайте имя файла)
@@ -75,4 +99,29 @@ print(result)
 # Найдите и выведите самую длинную последовательность одинаковых цифр
 # в вышезаполненном файле.
 
-# пока нет времени :(
+import random
+import re
+
+file_name = "digits.txt"
+with open(file_name, "w") as file:
+    # s = ""
+    for i in range(0, 2500):
+        digit = random.randint(0, 9).__str__()
+        file.write(digit)
+
+max = {"sub": "", "len": 0}
+sub = []
+with open(file_name, "r") as file:
+    s = file.read()
+    print(s)
+    print("Длина строки: ", len(s))
+
+for j in re.findall(r'(.)\1+', s):
+    sub = re.findall(f'{j}{{2,}}', s)
+    lenght = len(sub[0])
+    if lenght > max["len"]:
+        max["sub"] = sub[0]
+        max["len"] = lenght
+print(max["sub"])
+
+
